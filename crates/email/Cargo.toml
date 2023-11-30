@@ -1,0 +1,23 @@
+[package]
+name = "email_gen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sha2 = "0.10.6"
+hex = "0.4"
+rsa = "0.9"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rand = "0.8"
+
+thiserror = "1"
+anyhow = { version = "1.0" }
+ethers = { version = "2.0" }
+
+lettre = {version = "0.11.1", features = ["dkim"]}
+email-rs = { git = "https://github.com/sking789/email-rs.git", branch = "multi-dkim-header" }
+
+utils = { path = "../utils" }

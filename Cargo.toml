@@ -1,0 +1,23 @@
+[package]
+name = "social_recovery_utils"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = ["crates/openid", "crates/utils", "crates/passkey", "crates/email"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8"
+hex = "*"
+sha2 = "0.10.6"
+base64 = "0.21.0"
+anyhow = { version = "1.0" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4.4.2", features = ["derive"] }
+tokio = { version = "1", features = ["macros", "rt", "rt-multi-thread"] }
+
+openid_gen = { path = "crates/openid" }
+passkey_gen = { path = "crates/passkey" }
+email_gen = { path = "crates/email" }
