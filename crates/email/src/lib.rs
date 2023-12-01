@@ -51,8 +51,6 @@ pub fn generate_args(
     );
     let params = parse_email(&email).unwrap();
 
-    println!("{}", serde_json::to_string_pretty(&params).unwrap());
-
     let args = ethers::abi::encode_packed(&[
         (0u8).to_be_bytes().into_token(),
         (params.subject_index as u32).to_be_bytes().into_token(),
@@ -77,8 +75,6 @@ pub fn generate_args(
         Token::Bytes(params.dkim_sig),
     ])
     .unwrap();
-
-    println!("{}", to_0x_hex(&args));
 
     return serde_json::to_string_pretty(&EmailArgs {
         pk: public_key.n().to_str_radix(16),

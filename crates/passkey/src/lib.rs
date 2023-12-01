@@ -11,7 +11,7 @@ use passkey::{
 use coset::iana;
 use serde::{Deserialize, Serialize};
 use url::Url;
-use utils::from_0x_hex;
+use utils::{from_0x_hex, to_0x_hex};
 
 // MyUserValidationMethod is a stub impl of the UserValidationMethod trait, used later.
 struct MyUserValidationMethod {}
@@ -76,7 +76,6 @@ async fn client_setup(
     // Now create the credential.
     let my_webauthn_credential = my_client.register(origin, request, None).await?;
 
-    println!("register finish");
     // Let's try and authenticate.
     // Create a challenge that would usually come from the RP.
     // let challenge_bytes_from_rp: Bytes = random_vec(32).into();
@@ -115,11 +114,6 @@ fn index_of_sub_array(array: &[u8], sub_array: &[u8], start: usize) -> Option<us
 pub struct PasskeyArgs {
     pub q_x: String,
     pub q_y: String,
-    pub r: String,
-    pub s: String,
-    pub authenticator_data: String,
-    pub client_data_jsonpre: String,
-    pub client_data_jsonpost: String,
     pub args: String,
 }
 
@@ -175,14 +169,9 @@ pub async fn generate_args(challenge: String) -> String {
     .concat();
 
     let passkey_args = PasskeyArgs {
-        q_x: hex::encode(&pk.as_slice()[27..59]),
-        q_y: hex::encode(&pk.as_slice()[59..91]),
-        r: hex::encode(signature.r().to_bytes()),
-        s: hex::encode(signature.s().to_bytes()),
-        authenticator_data: hex::encode(authed_cred.response.authenticator_data.as_slice()),
-        client_data_jsonpre: String::from_utf8(client_data_json_pre).unwrap(),
-        client_data_jsonpost: String::from_utf8(client_data_json_post).unwrap(),
-        args: hex::encode(&args),
+        q_x: to_0x_hex(&pk.as_slice()[27..59]),
+        q_y: to_0x_hex(&pk.as_slice()[59..91]),
+        args: to_0x_hex(&args),
     };
 
     serde_json::to_string_pretty(&passkey_args).unwrap()
